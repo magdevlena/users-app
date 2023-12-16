@@ -1,6 +1,12 @@
 server.port: 7701
 
-github-url: https://api.github.com/users/
+github:
+  url: https://api.github.com/users/
+#  token: personal-access-token
+
+calculations:
+  scale: 10
+  rounding-mode: HALF_UP
 
 logging:
   level:

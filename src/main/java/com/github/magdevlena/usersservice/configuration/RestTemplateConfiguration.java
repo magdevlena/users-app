@@ -21,12 +21,12 @@ public class RestTemplateConfiguration {
                     + " - rate limit might be easily exceeded.";
     private final String githubToken;
 
-    public RestTemplateConfiguration(@Value("${github-token:#{null}}") String token) {
+    public RestTemplateConfiguration(@Value("${github.token:#{null}}") String token) {
         this.githubToken = token;
     }
 
     @Bean
-    @ConditionalOnProperty(name = "github-token")
+    @ConditionalOnProperty(name = "github.token")
     public RestTemplate restTemplateWithTokenBearer() {
         log.info(GITHUB_TOKEN_PROVIDED_LOG);
         return new RestTemplateBuilder()

@@ -21,7 +21,7 @@ public class UserController {
     private final RestTemplate restTemplate;
     private final UserMapper mapper;
 
-    public UserController(@Value("${github-url}") String githubUrl, RestTemplate restTemplate, UserMapper mapper) {
+    public UserController(@Value("${github.url}") String githubUrl, RestTemplate restTemplate, UserMapper mapper) {
         this.githubUrl = githubUrl;
         this.restTemplate = restTemplate;
         this.mapper = mapper;
