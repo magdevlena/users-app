@@ -2,6 +2,7 @@ package com.github.magdevlena.usersservice.service;
 
 import com.github.magdevlena.usersservice.model.GithubUserDto;
 import com.github.magdevlena.usersservice.model.UserWIthCalculationsDto;
+import com.github.magdevlena.usersservice.validation.GithubLoginRequired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/{login}", produces = "application/json")
-    ResponseEntity<UserWIthCalculationsDto> getUser(@PathVariable String login) {
+    ResponseEntity<UserWIthCalculationsDto> getUser(@PathVariable @GithubLoginRequired String login) {
         final GithubUserDto dto = restTemplate.getForObject(githubUrl + login, GithubUserDto.class);
         if (isNull(dto)) {
             return ResponseEntity.notFound().build();
