@@ -1,7 +1,7 @@
 package com.github.magdevlena.usersservice.service;
 
 import com.github.magdevlena.usersservice.model.GithubUserDto;
-import com.github.magdevlena.usersservice.model.UserWIthCalculationsDto;
+import com.github.magdevlena.usersservice.model.UserWithCalculationsDto;
 import com.github.magdevlena.usersservice.validation.GithubLoginRequired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +19,20 @@ public class UserController {
 
     private final String githubUrl;
     private final RestTemplate restTemplate;
+    private final UserMapper mapper;
 
-    public UserController(@Value("${github-url}") String githubUrl, RestTemplate restTemplate) {
+    public UserController(@Value("${github-url}") String githubUrl, RestTemplate restTemplate, UserMapper mapper) {
         this.githubUrl = githubUrl;
         this.restTemplate = restTemplate;
+        this.mapper = mapper;
     }
 
     @GetMapping(value = "/users/{login}", produces = "application/json")
-    ResponseEntity<UserWIthCalculationsDto> getUser(@PathVariable @GithubLoginRequired String login) {
+    ResponseEntity<UserWithCalculationsDto> getUser(@PathVariable @GithubLoginRequired String login) {
         final GithubUserDto dto = restTemplate.getForObject(githubUrl + login, GithubUserDto.class);
         if (isNull(dto)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(new UserWIthCalculationsDto(dto.id(), dto.login(), "1", "2", "3", "4", "5"));
+        return ResponseEntity.ok().body(mapper.mapToUserWithCalculations(dto));
     }
 }
