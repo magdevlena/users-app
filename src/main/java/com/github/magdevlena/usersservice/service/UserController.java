@@ -1,6 +1,7 @@
 package com.github.magdevlena.usersservice.service;
 
 import com.github.magdevlena.usersservice.model.UserWithCalculationsDto;
+import com.github.magdevlena.usersservice.monitoring.CountRequestByLogin;
 import com.github.magdevlena.usersservice.validation.GithubLoginRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(value = "/users/{login}", produces = "application/json")
+    @CountRequestByLogin
     ResponseEntity<UserWithCalculationsDto> getUser(@PathVariable @GithubLoginRequired String login) {
         return ResponseEntity.ok().body(userService.getUser(login));
     }
