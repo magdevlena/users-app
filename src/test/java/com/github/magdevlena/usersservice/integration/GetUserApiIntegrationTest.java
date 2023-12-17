@@ -1,6 +1,9 @@
 package com.github.magdevlena.usersservice.integration;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,11 +49,6 @@ public class GetUserApiIntegrationTest {
         registry.add("redis.port", redisContainer::getFirstMappedPort);
     }
 
-    @AfterAll
-    static void closeRedisContainer() {
-        redisContainer.close();
-    }
-
     @Test
     @Order(1)
     void getUserAPI_WithFirstApiCall_Returns200AndInitiatesRequestCount() throws Exception {
@@ -58,6 +57,7 @@ public class GetUserApiIntegrationTest {
                 .andExpect(status().isOk());
 
         // then
+        waitForAsyncRequestIncrementation();
         assertEquals(1L, Objects.requireNonNull(redisTemplate.opsForValue().get(VALID_EXISTING_LOGIN)).longValue());
     }
 
@@ -69,6 +69,7 @@ public class GetUserApiIntegrationTest {
                 .andExpect(status().isOk());
 
         // then
+        waitForAsyncRequestIncrementation();
         assertEquals(2L, Objects.requireNonNull(redisTemplate.opsForValue().get(VALID_EXISTING_LOGIN)).longValue());
     }
 
@@ -80,6 +81,7 @@ public class GetUserApiIntegrationTest {
                 .andExpect(status().isNotFound());
 
         // then
+        waitForAsyncRequestIncrementation();
         assertEquals(1L, Objects.requireNonNull(redisTemplate.opsForValue().get(NOT_EXISTING_LOGIN)).longValue());
     }
 
@@ -91,6 +93,7 @@ public class GetUserApiIntegrationTest {
                 .andExpect(status().isNotFound());
 
         // then
+        waitForAsyncRequestIncrementation();
         assertEquals(2L, Objects.requireNonNull(redisTemplate.opsForValue().get(NOT_EXISTING_LOGIN)).longValue());
     }
 
@@ -102,6 +105,7 @@ public class GetUserApiIntegrationTest {
                 .andExpect(status().isBadRequest());
 
         // then
+        waitForAsyncRequestIncrementation();
         assertEquals(1L, Objects.requireNonNull(redisTemplate.opsForValue().get(INVALID_LOGIN)).longValue());
     }
 
@@ -113,6 +117,22 @@ public class GetUserApiIntegrationTest {
                 .andExpect(status().isBadRequest());
 
         // then
+        waitForAsyncRequestIncrementation();
         assertEquals(2L, Objects.requireNonNull(redisTemplate.opsForValue().get(INVALID_LOGIN)).longValue());
+    }
+
+    @Test
+    @Order(7)
+    void getUserAPI_WhenRedisUnavailable_Returns200EvenThoughIncrementingRequestCountFailed() throws Exception {
+        // given
+        redisContainer.stop();
+
+        // when -then
+        mockMvc.perform(get("/users/" + VALID_EXISTING_LOGIN))
+                .andExpect(status().isOk());
+    }
+
+    private void waitForAsyncRequestIncrementation() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(1500);
     }
 }
