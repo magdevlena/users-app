@@ -24,6 +24,7 @@ public class GithubLoginValidator implements ConstraintValidator<GithubLoginRequ
      */
     @Override
     public boolean isValid(String login, ConstraintValidatorContext context) {
+        log.trace("Validating login " + login);
         final boolean isValid = Optional.ofNullable(login)
                 .map(GithubLoginValidator::matchesPattern)
                 .orElse(false);

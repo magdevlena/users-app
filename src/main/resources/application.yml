@@ -14,4 +14,8 @@ redis:
 
 logging:
   level:
-    com.github.magdevlena: TRACE
+    com.github.magdevlena: DEBUG
+
+springdoc:
+  swagger-ui.path: /openapi/swagger-ui.html
+  api-docs.path: /openapi/api-docs

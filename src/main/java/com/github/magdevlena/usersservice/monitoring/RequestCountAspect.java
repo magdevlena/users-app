@@ -26,7 +26,7 @@ public class RequestCountAspect {
             requestCountService.incrementRequestsForLogin(login);
         } catch (Exception e) {
             log.warn("Failed to increment request count for login " + login);
-            log.debug("Exception details: ", e);
+            log.trace("Exception details: ", e);
         }
     }
 }
