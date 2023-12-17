@@ -27,10 +27,12 @@ public class CalculationService {
 
     public String calculate(int followers, int publicRepos) {
         if (followers == 0) {
+            log.trace("Calculations not applicable, user has no followers.");
             return NOT_APPLICABLE_RESULT;
         }
 
         try {
+            log.trace("Performing calculations with {} followers and {} public repos.", followers, publicRepos);
             return calculate(BigDecimal.valueOf(followers), BigDecimal.valueOf(publicRepos)).toPlainString();
         } catch (ArithmeticException e) {
             log.debug("Unexpected arithmetic exception occurred during calculations.", e);
