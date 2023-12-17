@@ -20,7 +20,7 @@ public class UserService {
         this.mapper = mapper;
     }
 
-    UserWithCalculationsDto getUser(String login) {
+    public UserWithCalculationsDto getUser(String login) {
         final GithubUserDto dto = restTemplate.getForObject(githubUrl + login, GithubUserDto.class);
         return mapper.mapToUserWithCalculations(dto);
     }

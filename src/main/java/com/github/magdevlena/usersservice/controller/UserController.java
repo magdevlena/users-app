@@ -1,7 +1,8 @@
-package com.github.magdevlena.usersservice.service;
+package com.github.magdevlena.usersservice.controller;
 
 import com.github.magdevlena.usersservice.model.UserWithCalculationsDto;
 import com.github.magdevlena.usersservice.monitoring.CountRequestByLogin;
+import com.github.magdevlena.usersservice.service.UserService;
 import com.github.magdevlena.usersservice.validation.GithubLoginRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
