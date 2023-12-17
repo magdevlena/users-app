@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,8 +36,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
-    public ApplicationError handleHttpClientException(HttpClientErrorException e, HttpServletRequest request) {
-        return createApplicationError(HttpStatus.resolve(e.getStatusCode().value()), request, e);
+    public ResponseEntity<ApplicationError> handleHttpClientException(HttpClientErrorException e, HttpServletRequest request) {
+        final int statusCode = e.getStatusCode().value();
+        return ResponseEntity.status(statusCode).body(
+                createApplicationError(HttpStatus.resolve(statusCode), request, e)
+        );
     }
 
     private ApplicationError createApplicationError(HttpStatus httpStatus, HttpServletRequest request, Exception e) {
