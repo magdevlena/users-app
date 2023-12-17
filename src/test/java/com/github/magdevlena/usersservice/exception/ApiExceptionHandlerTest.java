@@ -13,6 +13,7 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.ZonedDateTime;
@@ -85,7 +86,7 @@ class ApiExceptionHandlerTest {
         final var result = sut.handleHttpClientException(httpClientErrorException, request);
 
         // then
-        assertEquals(getExpectedApplicationError(status), result);
+        assertEquals(ResponseEntity.status(status).body(getExpectedApplicationError(status)), result);
     }
 
     private ApplicationError getExpectedApplicationError(HttpStatus status) {

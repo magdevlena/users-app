@@ -11,7 +11,6 @@ public class UsersServiceApplication {
 
     public static void main(String[] args) {
         final ConfigurableApplicationContext context = SpringApplication.run(UsersServiceApplication.class, args);
-
         log.info("Application started on port " + context.getEnvironment().getProperty("server.port"));
     }
 
