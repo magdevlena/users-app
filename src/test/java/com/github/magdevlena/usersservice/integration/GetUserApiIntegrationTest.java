@@ -53,54 +53,66 @@ public class GetUserApiIntegrationTest {
     @Test
     @Order(1)
     void getUserAPI_WithFirstApiCall_Returns200AndInitiatesRequestCount() throws Exception {
+        // when - then
         mockMvc.perform(get("/users/" + VALID_EXISTING_LOGIN))
                 .andExpect(status().isOk());
 
+        // then
         assertEquals(1L, Objects.requireNonNull(redisTemplate.opsForValue().get(VALID_EXISTING_LOGIN)).longValue());
     }
 
     @Test
     @Order(2)
     void getUserAPI_WithSecondApiCall_Returns200AndIncrementsRequestCount() throws Exception {
+        // when - then
         mockMvc.perform(get("/users/" + VALID_EXISTING_LOGIN))
                 .andExpect(status().isOk());
 
+        // then
         assertEquals(2L, Objects.requireNonNull(redisTemplate.opsForValue().get(VALID_EXISTING_LOGIN)).longValue());
     }
 
     @Test
     @Order(3)
     void getUserAPI_WithNotExistingUserLogin_Returns404AndInitiatesRequestCount() throws Exception {
+        // when - then
         mockMvc.perform(get("/users/" + NOT_EXISTING_LOGIN))
                 .andExpect(status().isNotFound());
 
+        // then
         assertEquals(1L, Objects.requireNonNull(redisTemplate.opsForValue().get(NOT_EXISTING_LOGIN)).longValue());
     }
 
     @Test
     @Order(4)
     void getUserAPI_WithNotExistingUserLogin_Returns404AndIncrementsRequestCount() throws Exception {
+        // when - then
         mockMvc.perform(get("/users/" + NOT_EXISTING_LOGIN))
                 .andExpect(status().isNotFound());
 
+        // then
         assertEquals(2L, Objects.requireNonNull(redisTemplate.opsForValue().get(NOT_EXISTING_LOGIN)).longValue());
     }
 
     @Test
     @Order(5)
     void getUserAPI_WithIncorrectUserLogin_Returns400AndInitiatesRequestCount() throws Exception {
+        // when - then
         mockMvc.perform(get("/users/" + INVALID_LOGIN))
                 .andExpect(status().isBadRequest());
 
+        // then
         assertEquals(1L, Objects.requireNonNull(redisTemplate.opsForValue().get(INVALID_LOGIN)).longValue());
     }
 
     @Test
     @Order(6)
     void getUserAPI_WithIncorrectUserLogin_Returns400AndIncrementsRequestCount() throws Exception {
+        // when -then
         mockMvc.perform(get("/users/" + INVALID_LOGIN))
                 .andExpect(status().isBadRequest());
 
+        // then
         assertEquals(2L, Objects.requireNonNull(redisTemplate.opsForValue().get(INVALID_LOGIN)).longValue());
     }
 }
