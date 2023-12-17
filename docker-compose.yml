@@ -8,13 +8,21 @@ services:
       - redis
 
   redis:
-    image: "redis/redis-stack:latest"
+    image: redis:latest
     ports:
       - "6379:6379"
-      - "8001:8001"
-    command: redis-server --save 60 1 --protected-mode no --appendonly yes --dir data/redis
+    command: redis-server --save 60 1 --protected-mode no --appendonly yes
     volumes:
       - redis:/data
+
+  redis-insight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_URI=redis://redis:6379
+    depends_on:
+      - redis
 
 volumes:
   redis:
