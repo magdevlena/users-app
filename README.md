@@ -18,7 +18,7 @@ cases :)
 3. To see application logs run:
 
 ```bash
-docker logs usersservice-app-1 -f
+docker logs users-app-web-1 -f
 ```
 
 Application keeps track of request count per login using Redis. Every time request is received appropriate counter is
@@ -39,7 +39,7 @@ Use `src/main/resources/application.yml` to change web service configuration.
 #### Token
 
 It is highly recommended to set `github.token` to get higher rate limit for GitHub API, that is accessed to get user
-inforamtion.
+information.
 Check [Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
 and keep in mind to not share your public access token with anyone (when generating token, do not choose any scopes, as
 they are not necessary to access GitHub users API).
@@ -47,7 +47,7 @@ they are not necessary to access GitHub users API).
 #### Calculations
 
 It is possible to adjust details how calculations for user are performed, using below settings. To learn more about
-possible valueas and their meaning see: [
+possible values and their meaning see: [
 BigDecimal (https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html)
 
 ```yml
