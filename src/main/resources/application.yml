@@ -9,7 +9,7 @@ calculations:
   rounding-mode: HALF_UP
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
 
 logging:
